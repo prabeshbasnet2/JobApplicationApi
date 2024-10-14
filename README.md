@@ -1,7 +1,9 @@
 Overview
+
 The JobApplication API is built using ASP.NET Core and follows the principles of Clean Architecture. This architecture promotes separation of concerns, making the application more maintainable and testable. The API manages student applicant data, including names, emails, phone numbers, and preferred call times.
 
 Clean Architecture
+
 The application is structured into several layers, each with its own responsibility:
 
 Domain Layer: Contains the core business logic and entities, such as the Applicant entity.
@@ -14,12 +16,11 @@ Connection String
 The application currently uses Windows Authentication to connect to the SQL Server database. You can update the connection string located in the appsettings.json file.
 
 Default Connection String
-json
 Copy code
 "ConnectionStrings": {
     "Default": "Server=.; Database=ApplicantsDb; Trusted_Connection=true; TrustServerCertificate=true; Encrypt=false"
 }
-Updating the Connection String
+
 To update the connection string:
 
 Open the appsettings.json file in the root of your project.
@@ -28,16 +29,12 @@ Modify the Default connection string as needed. Here are some examples:
 
 SQL Server with SQL Authentication:
 
-json
-Copy code
 "Default": "Server=your_server; Database=ApplicantsDb; User Id=your_username; Password=your_password; Encrypt=true; TrustServerCertificate=true;"
 Azure SQL Database:
 
-json
-Copy code
 "Default": "Server=tcp:your_server.database.windows.net,1433; Initial Catalog=ApplicantsDb; Persist Security Info=False; User ID=your_username; Password=your_password; MultipleActiveResultSets=False; Encrypt=True; TrustServerCertificate=False; Connection Timeout=30;"
-Running Migrations with EF Core
 
+Running Migrations with EF Core
 
 To manage your database schema using Entity Framework Core migrations, follow these steps:
 
