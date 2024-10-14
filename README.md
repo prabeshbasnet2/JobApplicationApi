@@ -1,3 +1,4 @@
+**Please use IIS server to run the program as it was configured that way.**
 Overview
 
 The JobApplication API is built using ASP.NET Core and follows the principles of Clean Architecture. This architecture promotes separation of concerns, making the application more maintainable and testable. The API manages student applicant data, including names, emails, phone numbers, and preferred call times.
