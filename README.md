@@ -1,7 +1,9 @@
 **Please use IIS server to run the program as it was configured that way.**
+
+
 Overview
 
-The JobApplication API is built using ASP.NET Core and follows the principles of Clean Architecture. This architecture promotes separation of concerns, making the application more maintainable and testable. The API manages student applicant data, including names, emails, phone numbers, and preferred call times.
+The JobApplication API is built using ASP.NET Core and follows the principles of Clean Architecture. This architecture promotes separation of concerns, making the application more maintainable and testable. The API manages a job applicants data, including names, emails, phone numbers, Github and linkedinUrls and preferred call times.
 
 Clean Architecture
 
@@ -9,15 +11,17 @@ The application is structured into several layers, each with its own responsibil
 
 Domain Layer: Contains the core business logic and entities, such as the Applicant entity.
 Application Layer: Hosts the service interfaces and implementation that interact with the domain layer. It is responsible for business rules and orchestrating calls between the repository and the API layer.
+
 Infrastructure Layer: Handles data access, including Entity Framework Core configurations and the DbContext. This layer also contains repository implementations.
+
 API Layer: The presentation layer where the controllers reside, accepting HTTP requests and returning HTTP responses.
+
 This architecture allows for easy testing, as you can mock dependencies in the application layer while keeping the domain and infrastructure separate.
 
 Connection String
 The application currently uses Windows Authentication to connect to the SQL Server database. You can update the connection string located in the appsettings.json file.
 
 Default Connection String
-Copy code
 "ConnectionStrings": {
     "Default": "Server=.; Database=ApplicantsDb; Trusted_Connection=true; TrustServerCertificate=true; Encrypt=false"
 }
@@ -40,8 +44,6 @@ Running Migrations with EF Core
 To manage your database schema using Entity Framework Core migrations, follow these steps:
 
 Open the Package Manager Console in Visual Studio or use the terminal.
-bash
-Copy code
 Update-Database
 Verify the Migration: Check the database to ensure the changes have been applied correctly.
 
