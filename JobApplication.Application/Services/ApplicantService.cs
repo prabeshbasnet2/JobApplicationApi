@@ -4,6 +4,7 @@ using JobApplication.Domain.Entities;
 using JobApplication.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,15 +22,7 @@ namespace JobApplication.Application.Services
 
         public async Task CreateOrEditApplicant(CreateOrEditApplicantDto applicantDto)
         {
-            if (applicantDto == null)
-            {
-                throw new ArgumentNullException(nameof(applicantDto), "Applicant data cannot be null.");
-            }
-
-            if (string.IsNullOrWhiteSpace(applicantDto.Email))
-            {
-                throw new ArgumentException("Email is required.", nameof(applicantDto.Email));
-            }
+            ValidateApplicantDto(applicantDto);
 
             // Check if an applicant already exists with the provided email.
             var existingApplicant = await _applicantRepository.GetByEmailAsync(applicantDto.Email);
@@ -63,6 +56,19 @@ namespace JobApplication.Application.Services
                 };
 
                 await _applicantRepository.AddAsync(newApplicant);
+            }
+        }
+
+        private void ValidateApplicantDto(CreateOrEditApplicantDto applicantDto)
+        {
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(applicantDto);
+            bool isValid = Validator.TryValidateObject(applicantDto, validationContext, validationResults, true);
+
+            if (!isValid)
+            {
+                var errors = string.Join(", ", validationResults.Select(vr => vr.ErrorMessage));
+                throw new ValidationException($"Validation failed: {errors}");
             }
         }
     }
