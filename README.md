@@ -49,7 +49,10 @@ If you encounter errors such as missing references or DbContext issues, ensure t
 
 Your project references the required Microsoft.EntityFrameworkCore.Design package.
 The DbContext is correctly configured in the Startup.cs file.
-You are targeting the correct project in the Package Manager Console.
+
+Tests : 
+Unit tests are added to ensure the creation and edition part based on the UID email, invalid inputs, and null required types.
+
 Conclusion
 This project is designed with Clean Architecture principles, making it scalable and maintainable. Feel free to customize the connection strings to fit your environment and use the migration commands to manage your database schema.
 
