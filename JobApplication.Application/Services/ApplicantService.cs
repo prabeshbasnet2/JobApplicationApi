@@ -2,22 +2,22 @@
 using JobApplication.Application.Interfaces;
 using JobApplication.Domain.Entities;
 using JobApplication.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.Caching.Memory;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobApplication.Application.Services
 {
     public class ApplicantService : IApplicantService
     {
         private readonly IApplicantRepository _applicantRepository;
+        private readonly IMemoryCache _memoryCache;
 
-        public ApplicantService(IApplicantRepository applicantRepository)
+        private const string ApplicantsCacheKey = "ApplicantsCacheKey";
+
+        public ApplicantService(IApplicantRepository applicantRepository, IMemoryCache memoryCache)
         {
             _applicantRepository = applicantRepository;
+            _memoryCache = memoryCache;
         }
 
         public async Task CreateOrEditApplicant(CreateOrEditApplicantDto applicantDto)
@@ -57,7 +57,37 @@ namespace JobApplication.Application.Services
 
                 await _applicantRepository.AddAsync(newApplicant);
             }
+
+            _memoryCache.Remove(ApplicantsCacheKey);
         }
+
+        public async Task<List<ApplicantDto>> GetApplicants()
+        {
+            var cachedApplicants = _memoryCache.Get<List<ApplicantDto>>(ApplicantsCacheKey);
+
+            if (cachedApplicants == null)
+            {
+                // If not in cache, retrieve from the repository.
+                var applicants = await _applicantRepository.GetAllAsync();
+
+                // Map domain entities to DTOs.
+                cachedApplicants = applicants.Select(a => new ApplicantDto
+                {
+                    Name = a.FirstName + " " + a.LastName,
+                    Email = a.Email,
+                    Phone = a.Phone,
+                    BestCallTime = a.BestCallTime,
+                    GitHubUrl = a.GitHubUrl,
+                    LinkedInUrl = a.LinkedInUrl,
+                    Comments = a.Comments
+                }).ToList();
+
+                _memoryCache.Set(ApplicantsCacheKey, cachedApplicants, TimeSpan.FromMinutes(10));
+            }
+
+            return cachedApplicants;
+        }
+
 
         private void ValidateApplicantDto(CreateOrEditApplicantDto applicantDto)
         {

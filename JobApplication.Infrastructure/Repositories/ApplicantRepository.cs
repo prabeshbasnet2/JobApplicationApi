@@ -1,11 +1,6 @@
 ﻿using JobApplication.Domain.Entities;
 using JobApplication.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JobApplication.Infrastructure.Repositories
 {
@@ -39,7 +34,7 @@ namespace JobApplication.Infrastructure.Repositories
             return await _dbContext.Applicants.ToListAsync();
         }
 
-        public async Task<Applicant> GetByEmailAsync(string email)
+        public async Task<Applicant?> GetByEmailAsync(string email)
         {
             return await _dbContext.Applicants.FirstOrDefaultAsync(x => x.Email == email);
         }

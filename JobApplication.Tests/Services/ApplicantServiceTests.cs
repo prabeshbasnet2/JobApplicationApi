@@ -3,6 +3,7 @@ using JobApplication.Application.Interfaces;
 using JobApplication.Application.Services;
 using JobApplication.Domain.Entities;
 using JobApplication.Domain.Interfaces;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,12 +12,14 @@ namespace JobApplication.Tests.Services
     public class ApplicantServiceTests
     {
         private readonly Mock<IApplicantRepository> _applicantRepositoryMock;
+        private readonly Mock<IMemoryCache> _memoryCacheMock; // Add this line
         private readonly IApplicantService _applicantService;
 
         public ApplicantServiceTests()
         {
             _applicantRepositoryMock = new Mock<IApplicantRepository>();
-            _applicantService = new ApplicantService(_applicantRepositoryMock.Object);
+            _memoryCacheMock = new Mock<IMemoryCache>(); // Mock IMemoryCache
+            _applicantService = new ApplicantService(_applicantRepositoryMock.Object, _memoryCacheMock.Object);
         }
 
         [Fact]
